@@ -3,6 +3,7 @@
   "name": "server_connection_test",
   "version": "1.0",
   "dependencies": {
+    "@notionhq/client": "^2.2.14",
     "dotenv": "^16.4.2",
     "firebase": "^10.8.0"
   }
