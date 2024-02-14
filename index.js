@@ -47,7 +47,6 @@ signInWithEmailAndPassword(auth, email, password)
     });
 
 
-
 // 노션 데이터 가져오기
 const NOTION_KEY = process.env.NOTION_KEY;
 const FEST_KEY = process.env.NOTION_FEST_ID;
@@ -56,15 +55,19 @@ const NOTION = new Client({ auth: NOTION_KEY });
 const getPageProperty = async (id_array) => {
     const PROPERTY_OBJECT = [];
     for (let i = 0; i < id_array.length; i++) {
+        const DATA_TYPE_ARRAY = [];
         const response = await NOTION.pages.retrieve({ page_id: id_array[i].id })
             .then(data => {
+                data.properties.type.multi_select.forEach((el) => { DATA_TYPE_ARRAY.push(el.name) })
                 PROPERTY_OBJECT.push({
                     title: data.properties.name.title[0].plain_text,
                     start_date: data.properties.date.date ? data.properties.date.date.start : '',
                     end_date: data.properties.date.date && data.properties.date.date.end ? data.properties.date.date.end : '',
                     d_date: data.properties.d_day.formula.string ? data.properties.d_day.formula.string : "",
-                    link: data.properties.link.url ? data.properties.link.url : '',
+                    Alink: data.properties.Alink.url ? data.properties.Alink.url : '',
+                    Clink: data.properties.Clink.url ? data.properties.Clink.url : '',
                     emoji: data.icon ? data.icon.emoji : '',
+                    type: DATA_TYPE_ARRAY
                 })
             })
     }
@@ -86,7 +89,9 @@ const getFestPages = async (req, res) => {
         database_id: FEST_KEY,
         sorts: [{
             property: 'date',
-            direction: 'descending',
+            direction: 'ascending'
+            // direction: 'descending',
+
         }]
     });
 
